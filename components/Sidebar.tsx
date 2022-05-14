@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import React from 'react'
 
 const menu = [
@@ -25,9 +26,10 @@ const menu = [
 ]
 
 function Sidebar() {
+  const router = useRouter();
   return (
     <div className="h-screen w-1/5 min-w-[20%]">
-      <div className="mx-4 my-4 flex w-3/5 cursor-pointer space-x-4 rounded-full border-t bg-white py-2 pt-3 pl-4 shadow-lg">
+      <div onClick={()=>{router.push('/compose')}} className="mx-4 my-4 flex w-3/5 cursor-pointer space-x-4 rounded-full border-t bg-white py-2 pt-3 pl-4 shadow-lg">
         <div>
           <Image
             src={
@@ -42,7 +44,7 @@ function Sidebar() {
 
       <div className="space-y-3 mt-6">
         {menu.map((item) => (
-          <MenuOption name={item.name} icon={item.icon} key={item.icon} />
+          <MenuOption name={item.name} icon={item.icon} key={item.name} />
         ))}
       </div>
     </div>

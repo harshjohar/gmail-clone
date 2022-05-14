@@ -5,8 +5,13 @@ import {
   MoreVertOutlined,
   Refresh,
 } from '@mui/icons-material'
+import { collection, orderBy, query, where } from 'firebase/firestore'
 import Image from 'next/image'
 import React from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth, db } from '../Firebase/firebase'
+import { useCollection } from 'react-firebase-hooks/firestore'
+import Mail from './Mail'
 
 const menu = [
   {
@@ -28,6 +33,12 @@ const menu = [
 ]
 
 function Mails() {
+  const [user] = useAuthState(auth)
+
+  const [mailSnapshot] = useCollection(
+    query(collection(db, 'mails'), where('to', '==', user?.email))
+  )
+
   return (
     <div className="w-4/5">
       <div className="flex w-full items-center justify-between px-5 py-4">
@@ -43,14 +54,16 @@ function Mails() {
       </div>
       <hr />
 
-      <div className='flex w-full justify-between pr-10 pl-5 mt-4'>
+      <div className="mt-4 flex w-full justify-between pr-10 pl-5">
         {menu.map((item) => (
-          <MenuOption name={item.name} icon={item.icon} />
+          <MenuOption name={item.name} icon={item.icon} key={item.name} />
         ))}
       </div>
 
-      <div>
-          
+      <div className='mt-4'>
+        {mailSnapshot?.docs.map(item=>{
+          return <Mail mail={{...item.data(), id: item.id}} key={item.id} />
+        })}
       </div>
     </div>
   )
