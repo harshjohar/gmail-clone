@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Header from '../components/Header'
+import Mails from '../components/Mails'
 import Sidebar from '../components/Sidebar'
 
 const Home: NextPage = () => {
@@ -14,6 +15,7 @@ const Home: NextPage = () => {
         <Header/>
         <div className='flex'>
           <Sidebar/>
+          <Mails />
         </div>
       </main>
       
