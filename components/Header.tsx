@@ -2,6 +2,8 @@ import { Apps, Help, Menu, Search, Settings } from '@mui/icons-material'
 import MenuIcon from '@mui/icons-material/Menu'
 import Image from 'next/image'
 import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent'
+import { signOut } from 'firebase/auth'
+import { auth } from '../Firebase/firebase'
 
 function Header() {
   return (
@@ -42,7 +44,7 @@ function Header() {
               height={40}
               width={40}
               className='rounded-full cursor-pointer'
-              onClick={()=>{}}
+              onClick={()=>{signOut(auth)}}
             />
           </div>
         </div>
