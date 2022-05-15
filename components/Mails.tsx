@@ -12,6 +12,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, db } from '../Firebase/firebase'
 import { useCollection } from 'react-firebase-hooks/firestore'
 import Mail from './Mail'
+import Loading from './Loading'
 
 const menu = [
   {
@@ -35,12 +36,15 @@ const menu = [
 function Mails() {
   const [user] = useAuthState(auth)
 
-  const [mailSnapshot] = useCollection(
+  const [mailSnapshot, loading] = useCollection(
     query(collection(db, 'mails'), where('to', '==', user?.email), limit(15))
   )
 
   console.log(mailSnapshot)
 
+  if(loading) {
+    return <Loading/>
+  }
   return (
     <div className="w-4/5">
       <div className="flex w-full items-center justify-between px-5 py-4">
