@@ -5,7 +5,7 @@ import {
   MoreVertOutlined,
   Refresh,
 } from '@mui/icons-material'
-import { collection, orderBy, query, where } from 'firebase/firestore'
+import { collection, limit, orderBy, query, where } from 'firebase/firestore'
 import Image from 'next/image'
 import React from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -36,8 +36,10 @@ function Mails() {
   const [user] = useAuthState(auth)
 
   const [mailSnapshot] = useCollection(
-    query(collection(db, 'mails'), where('to', '==', user?.email))
+    query(collection(db, 'mails'), where('to', '==', user?.email), limit(15))
   )
+
+  console.log(mailSnapshot)
 
   return (
     <div className="w-4/5">
@@ -60,7 +62,7 @@ function Mails() {
         ))}
       </div>
 
-      <div className='mt-4'>
+      <div className='mt-4 overflow-y-scroll scrollbar-hide'>
         {mailSnapshot?.docs.map(item=>{
           return <Mail mail={{...item.data(), id: item.id}} key={item.id} />
         })}

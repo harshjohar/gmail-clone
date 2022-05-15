@@ -4,12 +4,16 @@ import Image from 'next/image'
 import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent'
 import { signOut } from 'firebase/auth'
 import { auth } from '../Firebase/firebase'
+import Link from 'next/link'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 function Header() {
+  const [user] = useAuthState(auth)
   return (
     <div className="flex h-full items-center border-b">
       <div className="flex h-full w-1/5 items-center space-x-4 p-3 px-8">
         <MenuIcon className="cursor-pointer text-gray-700" />
+        <Link href={'/'}>
         <div>
           <Image
             src={
@@ -18,8 +22,9 @@ function Header() {
             height={40}
             width={110}
             className="cursor-pointer"
-          />
+            />
         </div>
+            </Link>
       </div>
       <div className="flex h-full w-4/5 items-center justify-between">
         <div className="flex w-3/5 items-center space-x-3 rounded-lg border bg-gray-100 px-3">
@@ -39,7 +44,7 @@ function Header() {
           <div>
             <Image
               src={
-                'https://lh3.googleusercontent.com/ogw/ADea4I6mhFiIaHKJjMiKeBpGlzQYguoYvbNmDiVdi7AryQ=s64-c-mo'
+                user?.photoURL!
               }
               height={40}
               width={40}
