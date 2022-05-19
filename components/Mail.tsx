@@ -7,13 +7,13 @@ import React from 'react'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 
-function Mail({ mail }: any) {
+function Mail({ mail, sent, drafts }: any) {
   const router = useRouter()
 
   return (
     <div
       className="flex cursor-pointer items-center space-x-2 border py-2 hover:shadow-lg"
-      onClick={() => router.push(`/mail/${mail.id}`)}
+      onClick={!drafts?() => router.push(`/mail/${mail.id}`):()=>router.push(`/mail/draft/${mail.id}`)}
     >
       <div className="flex w-[10%] space-x-3">
         <CropSquare />
@@ -22,7 +22,7 @@ function Mail({ mail }: any) {
       </div>
 
       <div className="w-1/5">
-        <p className="truncate">{mail.from}</p>
+        <p className="truncate">{sent?mail.to:mail.from}</p>
       </div>
 
       <div className="w-3/5">

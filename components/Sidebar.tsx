@@ -6,22 +6,27 @@ const menu = [
   {
     name: 'Inbox',
     icon: 'https://www.gstatic.com/images/icons/material/system/2x/inbox_gm_googlered600_20dp.png',
+    url: '/'
   },
   {
     name: 'Starred',
     icon: 'https://www.gstatic.com/images/icons/material/system/2x/inbox_gm_googlered600_20dp.png',
+    url: '/'
   },
   {
-    name: 'Snoozed',
+    name: 'Sent',
     icon: 'https://www.gstatic.com/images/icons/material/system/2x/inbox_gm_googlered600_20dp.png',
+    url: '/sent'
   },
   {
     name: 'Drafts',
     icon: 'https://www.gstatic.com/images/icons/material/system/2x/inbox_gm_googlered600_20dp.png',
+    url: '/drafts'
   },
   {
     name: 'More',
     icon: 'https://www.gstatic.com/images/icons/material/system/2x/inbox_gm_googlered600_20dp.png',
+    url: ''
   },
 ]
 
@@ -44,7 +49,7 @@ function Sidebar() {
 
       <div className="space-y-3 mt-6">
         {menu.map((item) => (
-          <MenuOption name={item.name} icon={item.icon} key={item.name} />
+          <MenuOption name={item.name} icon={item.icon} key={item.name} url={item.url} />
         ))}
       </div>
     </div>
@@ -53,9 +58,10 @@ function Sidebar() {
 
 export default Sidebar
 
-function MenuOption({ name, icon }: { name: string; icon: string }) {
+function MenuOption({ name, icon, url }: { name: string; icon: string, url: string }) {
+  const router = useRouter();
   return (
-    <div className="flex mx-2 space-x-4 ml-8 cursor-pointer">
+    <div className="flex mx-2 space-x-4 ml-8 cursor-pointer" onClick={()=>router.push(url)}>
       <Image src={icon} height={20} width={20} />
       <p>{name}</p>
     </div>

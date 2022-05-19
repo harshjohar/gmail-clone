@@ -33,17 +33,35 @@ const menu = [
   },
 ]
 
-function Mails() {
+function Mails({ drafts, sent }: { drafts?: boolean; sent?: boolean }) {
   const [user] = useAuthState(auth)
 
-  const [mailSnapshot, loading] = useCollection(
-    query(collection(db, 'mails'), where('to', '==', user?.email), limit(15))
-  )
+  const [mailSnapshot, loading] = drafts
+    ? useCollection(
+        query(
+          collection(db, 'drafts'),
+          where('from', '==', user?.email),
+          limit(15)
+        )
+      )
+    : sent
+    ? useCollection(
+        query(
+          collection(db, 'mails'),
+          where('from', '==', user?.email),
+          limit(15)
+        )
+      )
+    : useCollection(
+        query(
+          collection(db, 'mails'),
+          where('to', '==', user?.email),
+          limit(15)
+        )
+      )
 
-  console.log(mailSnapshot)
-
-  if(loading) {
-    return <Loading/>
+  if (loading) {
+    return <Loading />
   }
   return (
     <div className="w-4/5">
@@ -66,9 +84,16 @@ function Mails() {
         ))}
       </div>
 
-      <div className='mt-4 overflow-y-scroll scrollbar-hide'>
-        {mailSnapshot?.docs.map(item=>{
-          return <Mail mail={{...item.data(), id: item.id}} key={item.id} />
+      <div className="mt-4 overflow-y-scroll scrollbar-hide">
+        {mailSnapshot?.docs.map((item) => {
+          return (
+            <Mail
+              mail={{ ...item.data(), id: item.id }}
+              key={item.id}
+              sent={sent}
+              drafts={drafts}
+            />
+          )
         })}
       </div>
     </div>

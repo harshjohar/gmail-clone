@@ -6,11 +6,11 @@ import React, { FormEvent, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, db } from '../Firebase/firebase'
 
-function Compose() {
+function Compose({ draft }: { draft?: any }) {
   const [user] = useAuthState(auth)
-  const [email, setEmail] = useState('')
-  const [subject, setSubject] = useState('')
-  const [message, setMessage] = useState('')
+  const [email, setEmail] = useState(draft?draft.to:"")
+  const [subject, setSubject] = useState(draft?draft.subject:"")
+  const [message, setMessage] = useState(draft?draft.message:"")
   const router = useRouter()
 
   const submitForm = (e: FormEvent<HTMLFormElement>) => {
@@ -28,10 +28,30 @@ function Compose() {
       })
       .catch((err) => console.log(err.message))
   }
+
+  const handleDraft = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+
+    addDoc(collection(db, 'drafts'), {
+      from: user?.email,
+      to: email,
+      subject,
+      message,
+      time: serverTimestamp(),
+    })
+      .then(() => {
+        router.push('/')
+      })
+      .catch((err) => console.log(err.message))
+  }
+
   return (
     <div className="relative flex w-full flex-col items-center">
-      <h2 className="my-4 text-3xl">Compose Mail</h2>
-      <div className="absolute top-5 left-5 text-black" onClick={()=>router.push('/')}>
+      <h2 className="my-4 text-3xl">{draft?"Edit draft":"Compose Mail"}</h2>
+      <div
+        className="absolute top-5 left-5 text-black"
+        onClick={() => router.push('/')}
+      >
         <Button color="inherit">
           <ChevronLeft color="inherit" />
         </Button>
@@ -43,7 +63,7 @@ function Compose() {
         <input
           type="text"
           name="to"
-          placeholder="Recipients"
+          placeholder="Recipient"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="border-b border-gray-400 py-4  outline-none"
@@ -64,6 +84,7 @@ function Compose() {
           className="h-72 break-words break-all border-b py-4 outline-none"
         />
 
+        <button onClick={(e) => handleDraft(e)}>Save as draft</button>
         <button type="submit">Submit</button>
       </form>
     </div>

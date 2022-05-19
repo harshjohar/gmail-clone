@@ -8,11 +8,9 @@ import {
 } from '@mui/icons-material'
 import { Avatar, Button } from '@mui/material'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import React from 'react'
 
 function MailPage({ mailData }: { mailData: any }) {
-  const router = useRouter()
   return (
     <div className="w-full">
       {/* header */}
